@@ -29,4 +29,9 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadSceneAsync(sceneIndex);
     }
+
+    public void LoadSceneAddative(string sceneIndex)
+    {
+        SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+    }
 }
