@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class TouchScreenInput : MonoBehaviour, IDragHandler, IPointerDownHandler
 {
-    public float threshold = 0.1f; 
+    public float threshold = 0.25f; 
     public CharacterControl characterControl;
     private bool canDrag;
     public void OnDrag(PointerEventData eventData)
@@ -17,17 +17,16 @@ public class TouchScreenInput : MonoBehaviour, IDragHandler, IPointerDownHandler
         {
             if (eventData.delta.x >= threshold)
             {
-                characterControl.movement.destination.x += characterControl.movement.dashWorldBounds;
+                characterControl.DashRight();
                 canDrag = false;
             }
             if (eventData.delta.x <= -threshold)
             {
-                characterControl.movement.destination.x -= characterControl.movement.dashWorldBounds;
+                characterControl.DashLeft();
                 canDrag = false;
             }
         }
     }
-
     public void OnPointerDown(PointerEventData eventData)
     {
         canDrag = true;

@@ -30,12 +30,51 @@ public class CharacterControl : Character
         }
 
         movement.destination = transform.position;
+        movement.startPositionX = transform.position.x;
+    }
+    private void Update()
+    {
+//        Vector3 currentPos = transform.position;
+//#if UNITY_EDITOR
+//        if (Input.GetKeyDown(KeyCode.Space))
+//        {
+//            FootKick();
+//        }
+//        if (Input.GetKeyDown(KeyCode.D))
+//        {
+
+//            if (currentPos.x < movement.dashWorldBounds)
+//            {
+//                if (movement.destination.x < movement.dashWorldBounds)
+//                    movement.destination.x += movement.dashWorldBounds;
+//            }
+//        }
+//        if (Input.GetKeyDown(KeyCode.A))
+//        {
+//            if (currentPos.x > -movement.dashWorldBounds)
+//            {
+//                if (movement.destination.x > -movement.dashWorldBounds)
+//                    movement.destination.x -= movement.dashWorldBounds;
+//            }
+//        }
+//#endif
+        Dash(movement.destination);
     }
 
     public void Dash(Vector3 pos)
     {
         Vector3 lerpPos = Vector3.Lerp(transform.position, pos, Time.fixedDeltaTime * movement.dashSpeed);
         transform.position = lerpPos;
+    }
+    public void DashRight()
+    {
+        if (movement.destination.x < movement.dashWorldBounds + movement.startPositionX - 0.1f)
+            movement.destination.x += movement.dashWorldBounds;
+    }
+    public void DashLeft()
+    {
+        if (movement.destination.x > -movement.dashWorldBounds + movement.startPositionX + 0.1f)
+            movement.destination.x -= movement.dashWorldBounds;
     }
     public void FootKick()
     {
@@ -48,41 +87,6 @@ public class CharacterControl : Character
       
     }
 
-    private void Update()
-    {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FootKick();
-        }
-#endif
-        Vector3 currentPos = transform.position;
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (movement.dashEffect != null)
-                movement.dashEffect.Play();
-
-            if (currentPos.x < movement.dashWorldBounds)
-            {
-                if (movement.destination.x < movement.dashWorldBounds)
-                    movement.destination.x += movement.dashWorldBounds;
-            } 
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            if (movement.dashEffect != null)
-                movement.dashEffect.Play();
-
-            if (currentPos.x > -movement.dashWorldBounds)
-            {
-                if (movement.destination.x > -movement.dashWorldBounds)
-                    movement.destination.x -= movement.dashWorldBounds;
-            }
-        }
-
-        Dash(movement.destination);
-    }
 
     [ContextMenu("Attach Attack Behaviour")]
     private void AttachAttackScript()
@@ -96,12 +100,14 @@ public class CharacterControl : Character
             }
         }
     }
+
 }
 [System.Serializable]
 public class Movement
 {
     public float dashSpeed = 15;
     public float dashWorldBounds = 1;
+    public float startPositionX = 0;
     public Vector3 destination;
     public ParticleSystem dashEffect;
 }

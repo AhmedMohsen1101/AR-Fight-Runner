@@ -12,7 +12,7 @@ public class PlacementIndicator : MonoBehaviour
     public bool isTranslate { get; set; }
 
     public Transform placementIndicator;
-    private GameObject fittingRoom;
+    private GameObject gameplayGrid;
 
     private ARRaycastManager aRRaycastManager;
     private void Start()
@@ -28,13 +28,7 @@ public class PlacementIndicator : MonoBehaviour
             UpdatePlacementIndicator();
             PlaceObject();
         }
-
-        if(isPlaced && isTranslate)
-        {
-            UpdatePlacementPose();
-            UpdatePlacementIndicator();
-            MoveObject();
-        }
+       
 #endif
     }
 
@@ -78,9 +72,10 @@ public class PlacementIndicator : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
-                fittingRoom = Instantiate(Resources.Load("Grid")) as GameObject;
+                gameplayGrid = Instantiate(Resources.Load("GameplayGrid")) as GameObject;
 
-                fittingRoom.transform.SetPositionAndRotation(placementPose.position, placementPose.rotation);
+                //gameplayGrid.transform.SetPositionAndRotation(placementPose.position, placementPose.rotation);
+                gameplayGrid.transform.position = placementPose.position;
 
                 isPlaced = true;
                 placementPoseIsValid = false;
@@ -102,7 +97,7 @@ public class PlacementIndicator : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
-                fittingRoom.transform.position = placementPose.position;
+                gameplayGrid.transform.position = placementPose.position;
                 placementPoseIsValid = false;
                 placementIndicator.gameObject.SetActive(placementPoseIsValid);
 
