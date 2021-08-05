@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType
+{
+
+}
 public class EnemyControl : Character
 {
     [SerializeField] private float speed = 6;
-    public Vector3 direction;
-    private bool isDead = false;
+    [SerializeField] private AudioSource hitSoundEffect; 
+    
+    [HideInInspector] public Vector3 direction;
+    [HideInInspector] public bool isDead = false;
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -17,20 +23,20 @@ public class EnemyControl : Character
     {
         if (!isDead)
         {
-            //Vector3 moveTowards = Vector3.MoveTowards(transform.position, -transform.forward, speed * Time.fixedDeltaTime);
-            //transform.position = moveTowards;
-              transform.Translate(direction * speed * Time.fixedDeltaTime);
+             transform.Translate(direction * speed * Time.fixedDeltaTime);
         }
            
     }
     public void TakeDamage(float force, Collider collider)
     {
         TurnRagdoll();
-        Vector3 direction = new Vector3(Random.Range(0, 1), Random.Range(0.8f, 1), Random.Range(0.5f, 1));
-        collider.attachedRigidbody.AddForce(direction * force, ForceMode.Force);
-        isDead = true;
-        Destroy(gameObject, 6);
-        //collider.attachedRigidbody.AddExplosionForce(force, transform.forward, 10);
+        float randomForce = Random.Range(force * 0.5f, force);
+        Vector3 direction = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(1.8f, 3f), Random.Range(2f, 3f));
+        collider.attachedRigidbody.AddForce(direction * randomForce, ForceMode.Force);
+        if (hitSoundEffect != null)
+            hitSoundEffect.Play();
+
+        Destroy(gameObject, 1);
     }
     
 }

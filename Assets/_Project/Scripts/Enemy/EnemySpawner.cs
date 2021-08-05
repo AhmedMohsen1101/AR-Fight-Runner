@@ -39,6 +39,6 @@ public class EnemySpawner : MonoBehaviour
 
     private GameObject InstantiateEnemy()
     {
-        return Instantiate(Resources.Load("Enemy"))as GameObject;
+        return Instantiate(Resources.Load("Enemy Three"))as GameObject;
     }
 }

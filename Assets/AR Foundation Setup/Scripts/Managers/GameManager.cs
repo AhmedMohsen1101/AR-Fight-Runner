@@ -4,6 +4,8 @@ using UnityEngine;
 
 public enum FrameRate
 {
+    FPS_2 = 2,
+    FPS_10 = 10,
     FPS_30 = 30,
     FPS_60 = 60,
     FPS_70 = 70,
@@ -15,10 +17,11 @@ public enum FrameRate
 public class GameManager : MonoBehaviour
 {
     public FrameRate frameRate;
+    public float timeScale = 1;
     private void Awake()
     {
         Application.targetFrameRate = (int)frameRate;
-
+        Time.timeScale = timeScale;
 
         DontDestroyOnLoad(this);
     }

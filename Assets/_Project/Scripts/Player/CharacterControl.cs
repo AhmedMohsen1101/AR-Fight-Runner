@@ -13,8 +13,9 @@ public class CharacterControl : Character
 {
     public float force;
     public ParticleSystem hitEffect;
-    public SkinnedMeshRenderer SkinnedMeshRenderer;
+    public AudioSource[] kickSoundEffects;
     public Movement movement;
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -23,65 +24,46 @@ public class CharacterControl : Character
         {
             if (ragdollPart.GetComponent<ApplyDamage>())
             {
-                ApplyDamage applyDamage = ragdollPart.gameObject.AddComponent<ApplyDamage>();
+                ApplyDamage applyDamage = ragdollPart.gameObject.GetComponent<ApplyDamage>();
                 applyDamage.force = this.force;
                 applyDamage.hitEffect = this.hitEffect;
+                applyDamage.kickSoundEffects = this.kickSoundEffects;
+
             }
         }
-
-        movement.destination = transform.position;
-        movement.startPositionX = transform.position.x;
+        transform.localPosition = Vector3.zero;
+        movement.destination = transform.localPosition;
+        movement.startPositionX = transform.localPosition.x;
     }
-    private void Update()
+    private void FixedUpdate()
     {
-//        Vector3 currentPos = transform.position;
-//#if UNITY_EDITOR
-//        if (Input.GetKeyDown(KeyCode.Space))
-//        {
-//            FootKick();
-//        }
-//        if (Input.GetKeyDown(KeyCode.D))
-//        {
-
-//            if (currentPos.x < movement.dashWorldBounds)
-//            {
-//                if (movement.destination.x < movement.dashWorldBounds)
-//                    movement.destination.x += movement.dashWorldBounds;
-//            }
-//        }
-//        if (Input.GetKeyDown(KeyCode.A))
-//        {
-//            if (currentPos.x > -movement.dashWorldBounds)
-//            {
-//                if (movement.destination.x > -movement.dashWorldBounds)
-//                    movement.destination.x -= movement.dashWorldBounds;
-//            }
-//        }
-//#endif
         Dash(movement.destination);
     }
 
     public void Dash(Vector3 pos)
     {
-        Vector3 lerpPos = Vector3.Lerp(transform.position, pos, Time.fixedDeltaTime * movement.dashSpeed);
-        transform.position = lerpPos;
+        Vector3 lerpPos = Vector3.Lerp(transform.localPosition, pos, Time.fixedDeltaTime * movement.dashSpeed);
+        transform.localPosition = lerpPos;
     }
     public void DashRight()
     {
         if (movement.destination.x < movement.dashWorldBounds + movement.startPositionX - 0.1f)
+        {
             movement.destination.x += movement.dashWorldBounds;
+        }
     }
     public void DashLeft()
     {
         if (movement.destination.x > -movement.dashWorldBounds + movement.startPositionX + 0.1f)
-            movement.destination.x -= movement.dashWorldBounds;
+        {
+            movement.destination.x -= movement.dashWorldBounds;        
+        }
     }
     public void FootKick()
     {
         if(animator.GetInteger("Attack") == 0)
         {
             int attack = Random.Range(1, (int)Kick.KICKING + 1);
-            Debug.Log(attack);
             animator.SetInteger("Attack", attack);
         }
       
@@ -109,5 +91,4 @@ public class Movement
     public float dashWorldBounds = 1;
     public float startPositionX = 0;
     public Vector3 destination;
-    public ParticleSystem dashEffect;
 }

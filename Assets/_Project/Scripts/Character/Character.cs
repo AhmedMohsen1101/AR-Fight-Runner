@@ -27,8 +27,8 @@ public class Character : MonoBehaviour
     protected void TurnRagdoll()
     {
         animator.enabled = false;
-        GetRigidbody.useGravity = false;
-        GetMainCollider.enabled = false;
+        Destroy(GetRigidbody);
+        Destroy(GetMainCollider);
         foreach (var ragdollPart in ragdollParts)
         {
             ragdollPart.isTrigger = false;
@@ -51,16 +51,16 @@ public class Character : MonoBehaviour
             colliders[i].gameObject.layer = ragdolLayerMask;
             colliders[i].isTrigger = true;
             colliders[i].attachedRigidbody.useGravity = false;
-            colliders[i].attachedRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            colliders[i].attachedRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            colliders[i].attachedRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            colliders[i].attachedRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
             if (colliders[i].GetComponent<CharacterJoint>())
             {
                 colliders[i].GetComponent<CharacterJoint>().enableCollision = true;
                 colliders[i].GetComponent<CharacterJoint>().enableProjection = true;
-                colliders[i].GetComponent<CharacterJoint>().enablePreprocessing = true;
+                //colliders[i].GetComponent<CharacterJoint>().enablePreprocessing = false;
             }
-           
+
             if (!ragdollParts.Contains(colliders[i]))
                 ragdollParts.Add(colliders[i]);
         }
