@@ -7,6 +7,7 @@ public class EnemySpawner : MonoBehaviour
     public CharacterControl characterControl;
     public float minSpawnTime = 2;
     public float maxSpawnTime = 4;
+    public ParticleSystem spawnEffect;
     private Vector3[] spawnPositions = new Vector3[3];
 
     private void Start()
@@ -23,13 +24,23 @@ public class EnemySpawner : MonoBehaviour
     }
     private void Spawn()
     {
+        Vector3 pos = GetRandomPosition();
+        if(spawnEffect != null)
+        {
+            spawnEffect.transform.position = pos;
+            spawnEffect.Play();
+        }
+        StartCoroutine(RountineSpawn(pos));
+    }
+    private IEnumerator RountineSpawn(Vector3 pos)
+    {
+        yield return new WaitForSeconds(0.3f);
         GameObject enemy = InstantiateEnemy();
-        enemy.transform.position = GetRandomPosition();
+        enemy.transform.position = pos;
         enemy.transform.SetParent(transform);
         enemy.transform.rotation = transform.localRotation;
         enemy.GetComponent<EnemyControl>().direction = this.transform.parent.forward;
     }
-
     private Vector3 GetRandomPosition()
     {
         int randomPosition = Random.Range(0, spawnPositions.Length);

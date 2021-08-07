@@ -31,8 +31,8 @@ public class Character : MonoBehaviour
         Destroy(GetMainCollider);
         foreach (var ragdollPart in ragdollParts)
         {
-            ragdollPart.isTrigger = false;
             ragdollPart.attachedRigidbody.useGravity = true;
+            ragdollPart.isTrigger = false;
         }
     }
 
@@ -56,8 +56,8 @@ public class Character : MonoBehaviour
 
             if (colliders[i].GetComponent<CharacterJoint>())
             {
-                colliders[i].GetComponent<CharacterJoint>().enableCollision = true;
-                colliders[i].GetComponent<CharacterJoint>().enableProjection = true;
+                colliders[i].GetComponent<CharacterJoint>().enableCollision = false;
+                colliders[i].GetComponent<CharacterJoint>().enableProjection = false;
                 //colliders[i].GetComponent<CharacterJoint>().enablePreprocessing = false;
             }
 

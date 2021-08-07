@@ -12,7 +12,7 @@ public enum Kick
 public class CharacterControl : Character
 {
     public float force;
-    public ParticleSystem hitEffect;
+    public DeathEffect deathEffect;
     public AudioSource[] kickSoundEffects;
     public Movement movement;
 
@@ -26,7 +26,7 @@ public class CharacterControl : Character
             {
                 ApplyDamage applyDamage = ragdollPart.gameObject.GetComponent<ApplyDamage>();
                 applyDamage.force = this.force;
-                applyDamage.hitEffect = this.hitEffect;
+                applyDamage.deathEffect = this.deathEffect;
                 applyDamage.kickSoundEffects = this.kickSoundEffects;
 
             }
@@ -49,14 +49,24 @@ public class CharacterControl : Character
     {
         if (movement.destination.x < movement.dashWorldBounds + movement.startPositionX - 0.1f)
         {
+            foreach (var effect in movement.dashEffects)
+            {
+                effect.Play();
+            }
             movement.destination.x += movement.dashWorldBounds;
+           
         }
     }
     public void DashLeft()
     {
         if (movement.destination.x > -movement.dashWorldBounds + movement.startPositionX + 0.1f)
         {
-            movement.destination.x -= movement.dashWorldBounds;        
+            foreach (var effect in movement.dashEffects)
+            {
+                effect.Play();
+            }
+            movement.destination.x -= movement.dashWorldBounds;
+           
         }
     }
     public void FootKick()
@@ -91,4 +101,5 @@ public class Movement
     public float dashWorldBounds = 1;
     public float startPositionX = 0;
     public Vector3 destination;
+    public ParticleSystem[] dashEffects;
 }

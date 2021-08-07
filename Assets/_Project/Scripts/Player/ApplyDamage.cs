@@ -5,7 +5,7 @@ using UnityEngine;
 public class ApplyDamage : MonoBehaviour
 {
     public float force;
-    public ParticleSystem hitEffect;
+    public DeathEffect deathEffect;
     public AudioSource[] kickSoundEffects;
     private Animator animator;
 
@@ -25,7 +25,6 @@ public class ApplyDamage : MonoBehaviour
             collider.GetComponentInParent<EnemyControl>().isDead = true;
 
             StartCoroutine(ApplyDamageRoutine(collider));
-            Debug.Log(collider.transform.parent.name + " " + collider.gameObject.name);
         }
     }
 
@@ -41,13 +40,12 @@ public class ApplyDamage : MonoBehaviour
         float randomForce = Random.Range(force, force);
         if (enemyControl != null)
         {
-            enemyControl.TakeDamage(force, collider);
+            enemyControl.TakeDamage(force);
 
             yield return new WaitForSeconds(0.1f);
-            if (hitEffect != null)
+            if (deathEffect != null)
             {
-                hitEffect.transform.position = this.transform.position;
-                hitEffect.Play();
+                deathEffect.PlayEffect(enemyControl.transform.position.x);
             }
         }
 
