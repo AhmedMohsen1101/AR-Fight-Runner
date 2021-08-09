@@ -36,8 +36,8 @@ public class EnemySpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         GameObject enemy = InstantiateEnemy();
-        enemy.transform.position = pos;
         enemy.transform.SetParent(transform);
+        enemy.transform.position = pos;
         enemy.transform.rotation = transform.localRotation;
         enemy.GetComponent<EnemyControl>().direction = this.transform.parent.forward;
     }

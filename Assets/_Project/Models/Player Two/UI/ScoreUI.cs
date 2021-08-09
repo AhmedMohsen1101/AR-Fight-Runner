@@ -13,7 +13,7 @@ public class ScoreUI : MonoBehaviour
         ScoreManager.Instance.OnHighScoreChanged += UpdateHighScore;
         
         scoreText.text = "0";
-        scoreText.text = ScoreManager.Instance.GetHighScore().ToString();
+        HighScoreText.text = ScoreManager.Instance.GetHighScore().ToString();
     }
 
     private void OnDisable()
